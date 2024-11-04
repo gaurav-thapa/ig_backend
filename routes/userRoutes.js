@@ -6,12 +6,16 @@ const {
   loginUser,
   getUser,
   getProfile,
+  saveProfile,
+  toggleFollowUser,
 } = require("../controllers/userController");
 
 //route for creating user
 router.post("/create", createUser);
 router.post("/login", loginUser);
 router.get("/get/:userID", getUser);
-router.get("/profile/:userID", getProfile);
+router.get("/profile/:username", getProfile);
+router.put("/saveProfile", saveProfile);
+router.post("/follow", toggleFollowUser)
 
 module.exports = router;

@@ -3,7 +3,32 @@ const {
   insertNewUser,
   getUserProfile,
   logUserIn,
+  updateUser,
+  followUser,
 } = require("../models/userModel");
+
+const toggleFollowUser = async (req, res)=>{
+  const {isActionFollow} = req.body;
+  try{
+    await followUser(req.body);
+    res.status(200).json(`${isActionFollow?'follow':'Unfollow'} success`);
+  }
+  catch(error){
+    console.error(error);
+    res.status(400).json(`failed to ${isActionFollow?'Follow':'Unfollow'} `);
+  }
+}
+
+const saveProfile = async (req, res) => {
+  try {
+    await updateUser(req.body);
+    res.status(200).json('user updated');
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json('user not updated');
+  }
+}
 
 const createUser = async (req, res) => {
   const { identifier, username, name, password } = req.body;
@@ -14,13 +39,12 @@ const createUser = async (req, res) => {
     password.trim() !== ""
   ) {
     try {
-      await insertNewUser(req.body);
-      res.status(200).json("USER CREATED");
+      const newUser = await insertNewUser(req.body);
+      res.status(200).json(newUser);
     } catch (error) {
       res.status(500).json("CANNOT CREATE USER");
     }
   }
-  console.log(req.body);
 };
 const loginUser = async (req, res) => {
   const resData = await logUserIn(req.body);
@@ -52,9 +76,9 @@ const getUser = async (req, res) => {
 };
 
 const getProfile = async (req, res) => {
-  const userID = req.params.userID;
-  const resData = await getUserProfile(userID);
+  const username = req.params.username;
+  const resData = await getUserProfile(username);
   res.status(200).json(resData);
 };
 
-module.exports = { createUser, loginUser, getUser, getProfile };
+module.exports = { createUser, loginUser, getUser, getProfile, saveProfile, toggleFollowUser };

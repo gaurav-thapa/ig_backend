@@ -15,10 +15,12 @@ app.use(express.json());
 //routes
 const userRoutes = require("./routes/userRoutes");
 const postRoutes = require("./routes/postRoutes");
+const exploreRoutes = require("./routes/exploreRoutes");
 
 //mount routes to path
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
+app.use("/explore", exploreRoutes);
 
 //start the server
 app.listen(port, () => {
